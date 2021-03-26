@@ -38,14 +38,14 @@ if [[ $(systemctl list-units --all apt-daily.service | fgrep -c apt-daily.servic
   sleep 5
 fi
 
-apt-get -qq update
-
 if [ $(dpkg-query -W -f='${Status}' git 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+apt-get -qq update
 echo "Installing git"
 apt-get -yqq install git 2>&1 >> /dev/null
 fi
 
 if [ $(dpkg-query -W -f='${Status}' ca-certificates 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+apt-get -qq update
 echo "Installing ca-certificates"
 apt-get -yqq install ca-certificates 2>&1 >> /dev/null
 fi
