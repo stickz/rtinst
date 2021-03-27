@@ -94,7 +94,7 @@ cd
 rm -fr /etc/rtinst
 git clone -q https://github.com/stickz/rtinst.git /etc/rtinst
 cd /etc/rtinst
-git checkout $branch > /dev/null 2>&1
+git checkout master
 cd
 ln -sf /etc/rtinst/scripts/* /usr/local/bin
 ln -sf /etc/rtinst/rtsetup /usr/local/bin
