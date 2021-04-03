@@ -168,6 +168,18 @@ exec >&3-
 echo $ip_address
 }
 
+generate_ssl_certs() {
+  # calls the script rtsslcert to generate the ssl certificated for nginx
+  if rtletsencrypt ; then
+    leflag=0
+    echo "Lets Encrypt Certificates installed"
+  else
+    rtsslcert -d
+    leflag=1
+    echo "Self signed certificats installed"
+  fi
+}
+
 
 ###############################
 ### SET VARIABLES ###
@@ -405,6 +417,12 @@ if installed rtorrent; then
     echo "rtorrent installation will be skipped."
   fi
 fi
+
+###############################
+### SSL CERTIFICATES (Pre Nginx) ###
+###############################
+
+generate_ssl_certs
 
 ###############################
 ### PREPARE SYSTEM ###
@@ -679,18 +697,10 @@ sshport=$(grep 'Port ' /etc/ssh/sshd_config | sed 's/[^0-9]*//g')
 echo "SSH port set to $sshport"
 
 ###############################
-### SSL CERTIFICATES ###
+### SSL CERTIFICATES (Post Nginx) ###
 ###############################
 
-# calls the script rtsslcert to generate the ssl certificated for nginx
-if rtletsencrypt ; then
-  leflag=0
-  echo "Lets Encrypt Certificates installed"
-else
-  rtsslcert -d
-  leflag=1
-  echo "Self signed certificats installed"
-fi
+generate_ssl_certs
 
 ###############################
 ### INSTALL NGINX ###
