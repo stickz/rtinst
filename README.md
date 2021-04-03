@@ -35,11 +35,10 @@ Current release has been tested with clean installs of:
 
 Services that will be installed and configured are
 
-	1. vsftpd - ftp server
-	2. libtorrent/rtorrent
-	3. rutorrent
-	4. Nginx (webserver)
-	5. webmin (optional see section 3.7 in main guide)
+	1. libtorrent/rtorrent
+	2. rutorrent
+	3. Nginx (webserver)
+	4. webmin (optional see section 3.7 in main guide)
 
 
 [rtinst installation guide](https://github.com/arakasi72/rtinst/wiki/Installing-rtinst)
