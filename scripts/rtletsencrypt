@@ -80,6 +80,9 @@ if [ $(snap list | grep -c "certbot") = 0 ]; then
   exit 1
 fi
 
+# stop the nginx service and reset the configuration file before generating a certificate
+service nginx stop
+cp -f /etc/rtinst/conf/nginxsite /etc/nginx/sites-available/default
 
 #Generating Certificates
 certbot -q --nginx --register-unsafely-without-email --agree-tos certonly -d $serverdn >> $logfile 2>&1
