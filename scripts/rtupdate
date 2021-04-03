@@ -196,7 +196,7 @@ fi
 echo
 echo "Installing libtorrent-$libvers/rtorrent-$rtvers"
 
-cd $home
+cd ~
 
 if [ -d source ]; then
   cd source
