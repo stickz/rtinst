@@ -35,12 +35,9 @@ apt-get -yqq install ca-certificates 2>&1 >> /dev/null
 fi
 
 echo "Installing rtinst"
-cd
 rm -fr /etc/rtinst
 git clone https://github.com/stickz/rtinst.git /etc/rtinst
 cd /etc/rtinst
-git checkout master
-cd
 ln -sf /etc/rtinst/scripts/* /usr/local/bin
 ln -sf /etc/rtinst/rtsetup /usr/local/bin
 
