@@ -271,17 +271,17 @@ echo "IP set to "$serverip
 
 export logfile="/dev/null"
 webpass=''
-cronline1="@reboot sleep 10; /usr/local/bin/rtcheck irssi rtorrent"
-cronline2="*/10 * * * * /usr/local/bin/rtcheck irssi rtorrent"
+cronline1="@reboot sleep 10; /usr/local/bin/rtcheck rtorrent"
+cronline2="*/10 * * * * /usr/local/bin/rtcheck rtorrent"
 dlflag=1
-portdefault=1
+portdefault=0
 
 skip_rt=1
 sshport=''
 rudevflag=1
 rurelease=master
 passfile='/etc/nginx/.htpasswd'
-package_list="sudo nano autoconf build-essential ca-certificates comerr-dev curl dtach htop irssi libcppunit-dev $libcver libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev libtool libxml2-dev ncurses-base ncurses-term ntp patch pkg-config $phpver-fpm $phpver $phpver-cli $phpver-dev $phpver-curl php-geoip $phpver-xmlrpc $phpver-xml $phpver-zip screen subversion texinfo unzip zlib1g-dev libcurl4-openssl-dev mediainfo software-properties-common $phpver-json nginx-full apache2-utils git libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libjson-rpc-perl libarchive-zip-perl libudns-dev"
+package_list="sudo nano autoconf build-essential ca-certificates comerr-dev curl dtach htop bmon libcppunit-dev $libcver libncurses5-dev libterm-readline-gnu-perl libsigc++-2.0-dev libperl-dev libtool libxml2-dev ncurses-base ncurses-term ntp patch pkg-config $phpver-fpm $phpver $phpver-cli $phpver-dev $phpver-curl php-geoip $phpver-xmlrpc $phpver-xml $phpver-zip screen subversion texinfo unzip zlib1g-dev libcurl4-openssl-dev mediainfo software-properties-common $phpver-json nginx-full apache2-utils git libarchive-zip-perl libnet-ssleay-perl libhtml-parser-perl libxml-libxml-perl libjson-perl libjson-xs-perl libxml-libxslt-perl libjson-rpc-perl libarchive-zip-perl libudns-dev"
 Install_list=""
 unixpass=""
 passflag=0
@@ -365,7 +365,6 @@ if [[ $xmlrpc_repo = 1 ]]; then
 fi
 
 echo -n "RuTorrent: ";check_url $ru_url && echo "OK" || { echo "FAIL"; major_repo=1; }
-echo -n "Autodl-irssi: "; check_url $adl_url && echo "OK" || { echo "FAIL"; major_repo=1; }
 
 if [ $os_repo = 1 ]; then
   echo "Some of your $osname mirrors are down, try again later"
@@ -940,7 +939,7 @@ if [ -z "$(crontab -u $user -l | grep "$cronline1")" ]; then
     (crontab -u $user -l; echo "$cronline1" ) | crontab -u $user - >> $logfile 2>&1
 fi
 
-if [ -z  "$(crontab -u $user -l | grep "\*/10 \* \* \* \* /usr/local/bin/rtcheck irssi rtorrent")" ]; then
+if [ -z  "$(crontab -u $user -l | grep "\*/10 \* \* \* \* /usr/local/bin/rtcheck rtorrent")" ]; then
     (crontab -u $user -l; echo "$cronline2" ) | crontab -u $user - >> $logfile 2>&1
 fi
 
@@ -987,7 +986,7 @@ echo | tee -a $home/rtinst.info
 echo "rtorrent torrent client" | tee -a $home/rtinst.info
 if installed rtorrent; then
   echo "   rtorrent $rt_current installed" | tee -a $home/rtinst.info
-  echo "   crontab entries made. rtorrent and irssi will start on boot for $user" | tee -a $home/rtinst.info
+  echo "   crontab entries made. rtorrent will start on boot for $user" | tee -a $home/rtinst.info
 else
   echo "   rtorrent was not installed" | tee -a $home/rtinst.info
 fi
