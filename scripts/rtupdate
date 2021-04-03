@@ -212,9 +212,13 @@ echo "Fetching source files"
 #  git clone -q -b feature-bind --single-branch https://github.com/rakshasa/libtorrent.git libtorrent-$libvers
 #  git clone -q -b feature-bind --single-branch https://github.com/rakshasa/rtorrent.git rtorrent-$rtvers
 #else
-  curl -# http://rtorrent.net/downloads/libtorrent-$libvers.tar.gz | tar xz
-  curl -# http://rtorrent.net/downloads/rtorrent-$rtvers.tar.gz | tar xz
+#  curl -# http://rtorrent.net/downloads/libtorrent-$libvers.tar.gz | tar xz
+#  curl -# http://rtorrent.net/downloads/rtorrent-$rtvers.tar.gz | tar xz
 #fi
+
+# Clone the latest version of libtorrent and rtorrent from github repos
+git clone https://github.com/stickz/libtorrent.git ~/source/libtorrent
+git clone https://github.com/rakshasa/rtorrent.git ~/source/rtorrent
 
 if [ $xmlrpc_repo = 0 ]; then
   svn co $xmlrpcloc xmlrpc  >> $logfile 2>&1
