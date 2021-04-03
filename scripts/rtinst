@@ -880,9 +880,8 @@ if [ -z "$(grep "ALL ALL = NOPASSWD: /usr/local/bin/rtsetpass" /etc/sudoers)" ];
   echo "ALL ALL = NOPASSWD: /usr/local/bin/rtsetpass" | (EDITOR="tee -a" visudo)  > /dev/null 2>&1
 fi
 
-# restart rtorrent and irssi
+# restart rtorrent
 su $user -c '/usr/local/bin/rt restart'
-su $user -c '/usr/local/bin/rt -i restart'
 
 # set up crontab entries
 if [ -z "$(crontab -u $user -l | grep "$cronline1")" ]; then
