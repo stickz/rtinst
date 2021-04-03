@@ -912,55 +912,6 @@ if [ $osname = "Raspbian" ]; then
 fi
 
 ###############################
-### INSTALL AUTODL-IRSSI ###
-###############################
-
-echo "Installing autodl-irssi" | tee -a $logfile
-adlport=$(random 36001 36100)
-adlpass=$(genpasswd $(random 12 16))
-
-mkdir -p $home/.irssi/scripts/autorun
-cd $home/.irssi/scripts
-curl -sL http://git.io/vlcND | sed -n 's/.*browser_download_url": \?"\(.*zip\)".*/\1/p' | xargs wget --quiet -O autodl-irssi.zip
-unzip -qq -o autodl-irssi.zip | tee -a $logfile
-rm autodl-irssi.zip
-cp autodl-irssi.pl autorun/
-mkdir -p $home/.autodl
-
-cd /var/www/rutorrent/plugins
-git clone -q https://github.com/autodl-community/autodl-rutorrent.git autodl-irssi | tee -a $home/rtinst.info
-
-mkdir /var/www/rutorrent/conf/users/$user/plugins/autodl-irssi
-
-touch /var/www/rutorrent/conf/users/$user/plugins/autodl-irssi/conf.php
-
-echo "<?php" > /var/www/rutorrent/conf/users/$user/plugins/autodl-irssi/conf.php
-echo >> /var/www/rutorrent/conf/users/$user/plugins/autodl-irssi/conf.php
-echo "\$autodlPort = $adlport;" >> /var/www/rutorrent/conf/users/$user/plugins/autodl-irssi/conf.php
-echo "\$autodlPassword = \"$adlpass\";" >> /var/www/rutorrent/conf/users/$user/plugins/autodl-irssi/conf.php
-echo >> /var/www/rutorrent/conf/users/$user/plugins/autodl-irssi/conf.php
-echo "?>" >> /var/www/rutorrent/conf/users/$user/plugins/autodl-irssi/conf.php
-
-cd $home/.autodl
-rm -f autodl2.cfg
-
-if [ -f "autodl.cfg" ]; then
-  if (grep -sq gui-server-port autodl.cfg) && (grep -sq gui-server-password autodl.cfg); then
-    sed -i "/gui-server-port/ c\gui-server-port = $adlport" autodl.cfg
-    sed -i "/gui-server-password/ c\gui-server-password = $adlpass" autodl.cfg
-  else
-    sed -i '/gui-server-port/ d' autodl.cfg
-    sed -i '/gui-server-password/ d' autodl.cfg
-    echo >> autodl.cfg
-    sed -i "1s/^/[options]\ngui-server-port = $adlport\ngui-server-password = $adlpass\n/" autodl.cfg
-  fi
-else
-  echo "[options]" > autodl.cfg
-  echo "gui-server-port = $adlport" >> autodl.cfg
-  echo "gui-server-password = $adlpass" >> autodl.cfg
-fi
-
-###############################
 ### FINAL TASKS ###
 ###############################
 
