@@ -231,7 +231,7 @@ if [ $xmlrpc_repo = 0 ]; then
   ./configure --prefix=/usr --disable-cplusplus CFLAGS=-O2 >> $logfile 2>&1
   make -j$(nproc) >> $logfile 2>&1
   make -s install >> $logfile 2>&1
-  cd $home/source
+  cd ~/source
 fi
 
 cd libtorrent*
