@@ -78,33 +78,6 @@ check_url() {
   if [[ `wget -S -T 3 --spider $1  2>&1 | grep 'HTTP/1.1 200 OK'` ]]; then return 0; else return 1; fi
 }
 
-# function to create a list of versions to install
-list_version() {
-local verschoice
-while [ -z "$verschoice" ]
-do
-  echo "Please select libtorrent/rtorrent version."
-  select verschoice in ${duoversion[*]}
-  do
-    libvers=$(echo $verschoice | cut -d/ -f1)
-    rtvers=$(echo $verschoice | cut -d/ -f2)
-    break
-  done
-done
-}
-
-ask_user(){
-local answer
-while true
-  do
-    read answer
-    case $answer in [Yy]* ) return 0 ;;
-                    [Nn]* ) return 1 ;;
-                        * ) echo "Enter y or n";;
-    esac
-  done
-}
-
 if [ "$(id -u)" != "0" ]; then
   echo "Must be run as root, or with sudo"
   exit 1
@@ -145,6 +118,13 @@ if [ $xmlrpc_repo = 1 ]; then
   fi
 fi
 
+libvers='0.13.8'
+rtvers='0.9.8'
+
+if [ -z "$home" ]; then
+  home=$HOME
+fi
+
 if [ -z $passed_rtvers ]; then
   if ( installed rtorrent ); then
     rt_current=$(rtorrent -h | grep -om 1 "[0-9]\{1,2\}\.[0-9]\{1,2\}\.[0-9]\{1,2\}")
@@ -154,47 +134,15 @@ if [ -z $passed_rtvers ]; then
     echo "This script is for upgrading/downgrading only, not for initial install"
     exit 1
   fi
-
-# checks if the OS is debian 9, and forces the version to 0.9.7 of it is
-  if [ $rtdevrel = 0 ]; then
-    echo "For Debian 9, and Ubuntu 17.10 and later, recommend libtorrent-0.13.7/rtorrent-0.9.7 or later"
-  fi
   
-  list_version
-  
-  echo "Install libtorrent-$libvers and rtorrent-$rtvers"
+  echo "Installing libtorrent-$libvers-udns and rtorrent-$rtvers"
   echo "Your rtorrent config, torrents, and data will not be lost or changed"
-  echo -n "Continue? "
-  if ! ask_user; then
-    exit
-  fi
 else
-  if [ "$passed_rtvers" = "latest" ] || [ $(wget -q -O - $sourcedir | grep -o "rtorrent-$passed_rtvers.tar.gz" | wc -l) -eq 0 ]; then
-    if [ "$passed_rtvers" != "latest" ]; then
-      echo " Could not find $passed_rtvers so using latest version instead"
-    fi
-    libvers=$latest_libvers
-    rtvers=$latest_rtvers
-  else
-    libvers=$(echo $passed_rtvers | awk -F. -v OFS=. '{$2='$(( $(echo $rtversion | cut -d. -f2) + 4 ))'; print }')
-    rtvers=$passed_rtvers
-  fi
-
-  # checks if the OS is debian 9, and forces the version to 0.9.7 of it is
-  if [ $rtdevrel = 0 ]; then
-    libvers='0.13.8'
-    rtvers='0.9.8'
-    echo "Debian 9, and Ubuntu 17.10 and later, are only supported by libtorrent-0.13.7/rtorrent-0.9.7 or later"
-  fi
-
+  echo "Installing libtorrent-$libvers-udns and rtorrent-$rtvers"
 fi
 
-if [ -z "$home" ]; then
-  home=$HOME
-fi
-
-echo
-echo "Installing libtorrent-$libvers/rtorrent-$rtvers"
+# Pause for 5 seconds so user can see the installing message
+sleep 5
 
 cd ~
 
