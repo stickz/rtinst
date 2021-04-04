@@ -165,8 +165,8 @@ echo "Fetching source files"
 #fi
 
 # Clone the latest version of libtorrent and rtorrent from github repos
-git clone https://github.com/stickz/libtorrent.git ~/source/libtorrent
-git clone https://github.com/rakshasa/rtorrent.git ~/source/rtorrent
+git clone https://github.com/stickz/libtorrent.git ~/source/libtorrent >> $logfile 2>&1
+git clone https://github.com/rakshasa/rtorrent.git ~/source/rtorrent >> $logfile 2>&1
 
 if [ $xmlrpc_repo = 0 ]; then
   svn co $xmlrpcloc xmlrpc  >> $logfile 2>&1
