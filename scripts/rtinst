@@ -861,6 +861,9 @@ if [ $osname = "Raspbian" ]; then
   echo 'enabled = no' >> /var/www/rutorrent/conf/plugins.ini
 fi
 
+# Copy GeoIP database for ruTorrent geoip plugin
+cp -r /etc/rtinst/GeoIP /usr/share
+
 ###############################
 ### FINAL TASKS ###
 ###############################
