@@ -62,7 +62,7 @@ network.xmlrpc.size_limit.set = 5M
 ### Memory Settings
 pieces.hash.on_completion.set = no
 pieces.preload.type.set = 1
-pieces.memory.max.set = 28000M
+pieces.memory.max.set = 20000M
 
 ### Logging:
 #   Levels = critical error warn notice info debug
