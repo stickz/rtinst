@@ -93,7 +93,7 @@ fi
 rm -rf xmlrpc libtorrent* rtorrent* curl*
 
 # if curl is not currently installed, then install it
-if ! command -v curl &> /dev/null then
+if [ ! command -v curl &> /dev/null ]; then
   # Get libcurl version 7.76.0 from the curl website, extract it and remove archive
   wget -q https://curl.se/download/curl-7.76.0.tar.gz 
   tar -xzf curl-7.76.0.tar.gz
