@@ -151,7 +151,7 @@ if [ -d source ]; then
 else
   mkdir source && cd source
 fi
-rm -rf xmlrpc libtorrent* rtorrent*
+rm -rf xmlrpc libtorrent* rtorrent* curl*
 
 echo "Fetching source files"
 
@@ -168,6 +168,9 @@ echo "Fetching source files"
 git clone https://github.com/stickz/libtorrent.git ~/source/libtorrent >> $logfile 2>&1
 git clone https://github.com/stickz/rtorrent.git ~/source/rtorrent >> $logfile 2>&1
 
+# Get libcurl version 7.76.0 from the curl website and extract it
+curl -# https://curl.se/download/curl-7.76.0.tar.gz | tar xz
+
 if [ $xmlrpc_repo = 0 ]; then
   svn co $xmlrpcloc xmlrpc  >> $logfile 2>&1
   if [ ! -e xmlrpc ]; then 
@@ -182,7 +185,13 @@ if [ $xmlrpc_repo = 0 ]; then
   cd ~/source
 fi
 
-cd libtorrent*
+cd curl*
+echo "Installing curl" | tee -a $logfile
+./configure --prefix=/usr CFLAGS=-O2 >> $logfile 2>&1
+make -j$(nproc) >> $logfile 2>&1
+make -s install >> $logfile 2>&1
+
+cd ../libtorrent*
 echo "Installing libtorrent" | tee -a $logfile
 ./autogen.sh >> $logfile 2>&1
 if [ $osname = "Raspbian" ]; then
