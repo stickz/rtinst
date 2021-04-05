@@ -83,6 +83,30 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
+# Change to source folder in root home directory, and clear previous source files if present
+cd ~
+if [ -d source ]; then
+  cd source
+else
+  mkdir source && cd source
+fi
+rm -rf xmlrpc libtorrent* rtorrent* curl*
+
+# if curl is not currently installed, then install it
+if ! command -v curl &> /dev/null then
+  # Get libcurl version 7.76.0 from the curl website, extract it and remove archive
+  wget -q https://curl.se/download/curl-7.76.0.tar.gz 
+  tar -xzf curl-7.76.0.tar.gz
+  rm curl-7.76.0.tar.gz
+
+  # Install curl before we procede, so rtorrent -n can be run
+  cd curl*
+  echo "Installing curl" | tee -a $logfile
+  ./configure --prefix=/usr CFLAGS=-O2 >> $logfile 2>&1
+  make -j$(nproc) >> $logfile 2>&1
+  make -s install >> $logfile 2>&1
+fi
+
 # Check the libtorrent/rtorrent and xmlrpc sites are available
 xmlrpc_repo=0
 rt_repo=0
@@ -144,15 +168,6 @@ fi
 # Pause for 5 seconds so user can see the installing message
 sleep 5
 
-cd ~
-
-if [ -d source ]; then
-  cd source
-else
-  mkdir source && cd source
-fi
-rm -rf xmlrpc libtorrent* rtorrent* curl*
-
 echo "Fetching source files"
 
 
@@ -168,9 +183,7 @@ echo "Fetching source files"
 git clone https://github.com/stickz/libtorrent.git ~/source/libtorrent >> $logfile 2>&1
 git clone https://github.com/stickz/rtorrent.git ~/source/rtorrent >> $logfile 2>&1
 
-# Get libcurl version 7.76.0 from the curl website and extract it
-wget https://curl.se/download/curl-7.76.0.tar.gz 
-tar -xzf curl-7.76.0.tar.gz
+cd ~/source
 
 if [ $xmlrpc_repo = 0 ]; then
   svn co $xmlrpcloc xmlrpc  >> $logfile 2>&1
@@ -183,14 +196,7 @@ if [ $xmlrpc_repo = 0 ]; then
   ./configure --prefix=/usr --disable-cplusplus CFLAGS=-O2 >> $logfile 2>&1
   make -j$(nproc) >> $logfile 2>&1
   make -s install >> $logfile 2>&1
-  cd ~/source
 fi
-
-cd curl*
-echo "Installing curl" | tee -a $logfile
-./configure --prefix=/usr CFLAGS=-O2 >> $logfile 2>&1
-make -j$(nproc) >> $logfile 2>&1
-make -s install >> $logfile 2>&1
 
 cd ../libtorrent*
 echo "Installing libtorrent" | tee -a $logfile
