@@ -169,7 +169,8 @@ git clone https://github.com/stickz/libtorrent.git ~/source/libtorrent >> $logfi
 git clone https://github.com/stickz/rtorrent.git ~/source/rtorrent >> $logfile 2>&1
 
 # Get libcurl version 7.76.0 from the curl website and extract it
-curl -# https://curl.se/download/curl-7.76.0.tar.gz | tar xz
+wget https://curl.se/download/curl-7.76.0.tar.gz 
+tar -xzf curl-7.76.0.tar.gz
 
 if [ $xmlrpc_repo = 0 ]; then
   svn co $xmlrpcloc xmlrpc  >> $logfile 2>&1
