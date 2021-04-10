@@ -99,7 +99,7 @@ if ! [ -x "$(command -v curl)" ]; then
   tar -xzf c-ares-1.17.1.tar.gz
   rm c-ares-1.17.1.tar.gz
   
-  # Install curl before we procede, so curl use threaded dns queries
+  # Install c-ares before we procede, so curl can use threaded dns queries
   cd c-ares*
   echo "Installing c-ares" | tee -a $logfile
   ./configure --prefix=/usr -disable-static CFLAGS=-O2 >> $logfile 2>&1
