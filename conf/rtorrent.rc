@@ -56,8 +56,8 @@ network.max_open_files.set = 10000
 network.max_open_sockets.set = 10000
 network.http.max_open.set = 1000
 network.send_buffer.size.set = 128M
-network.receive_buffer.size.set = 64M
-network.xmlrpc.size_limit.set = 5M
+network.receive_buffer.size.set = 128M
+network.xmlrpc.size_limit.set = 16M
 
 ### Memory Settings
 pieces.hash.on_completion.set = no
