@@ -16,8 +16,8 @@ releasename=$(lsb_release -cs)
 # Setup rtinst file for logging purposes
 mkdir -p /opt/rtinst
 export logencrypt="/opt/rtinst/rtletsencrypt"
-rm -f $(logencrypt)
-touch $(logencrypt)
+rm -f /opt/rtinst/rtletsencrypt
+touch /opt/rtinst/rtletsencrypt
 
 [ -z $logfile ] && logfile="/dev/null"
 if [ -z $serverip ]; then
