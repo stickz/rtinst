@@ -419,6 +419,10 @@ cp -f /etc/rtinst/conf/nginxsite /etc/nginx/sites-available/default
 touch /etc/nginx/conf.d/php
 touch /etc/nginx/conf.d/cache
 
+# Kill the procresses running on port 80 and 443 to pass the install procress
+fuser -k 80/tcp
+fuser -k 443/tcp
+
 ###############################
 ### PREPARE SYSTEM ###
 ###############################
