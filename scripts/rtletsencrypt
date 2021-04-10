@@ -13,6 +13,12 @@ headless=0
 osname=$(lsb_release -si)
 releasename=$(lsb_release -cs)
 
+# Setup rtinst file for logging purposes
+mkdir -p /opt/rtinst
+logencrypt = "/opt/rtinst/rtletsencrypt"
+rm -f $logencrypt
+touch $logencrypt
+
 [ -z $logfile ] && logfile="/dev/null"
 if [ -z $serverip ]; then
   headless=1
@@ -80,17 +86,23 @@ if [ $(snap list | grep -c "certbot") = 0 ]; then
   exit 1
 fi
 
-# stop the nginx service and wait for the procress to shutdown
-service nginx stop
-sleep 5
-
-# reset the configuration file before generating a certificate
-cp -f /etc/rtinst/conf/nginxsite /etc/nginx/sites-available/default
-
 #Generating Certificates
-certbot -q --nginx --register-unsafely-without-email --agree-tos certonly -d $serverdn >> $logfile 2>&1
+certbot -q --nginx --register-unsafely-without-email --agree-tos certonly -d $serverdn >> $logencrypt 2>&1
 
 if [ $? = 1 ]; then
+  echo "unable to generate certificates"
+  exit 1
+fi
+
+# Validate the log file for challange failed
+if [ -s $logencrypt ]; then
+  while read line; do
+    if [[ $line == *"Challenge failed for domain"* ]]; then
+      echo "unable to generate certificates"
+      exit 1
+    fi
+  done < $logencrypt
+else
   echo "unable to generate certificates"
   exit 1
 fi
@@ -104,6 +116,10 @@ fi
 if [ -d "/etc/letsencrypt/live/$serverdn" ]; then
   echo "Replacing certificates in nginx"
   
+  # reset the configuration file before updating with certificate
+  cp -f /etc/rtinst/conf/nginxsite /etc/nginx/sites-available/default
+  
+  # Update configuration files with certificate
   sed -i "/^\(\s\|#\)*server_name/ c\        server_name $serverdn;" /etc/nginx/sites-available/default
   sed -i "/ssl_certificate / c\        ssl_certificate /etc/letsencrypt/live/$serverdn/fullchain.pem;" /etc/nginx/sites-available/default
   sed -i "/ssl_certificate_key / c\        ssl_certificate_key /etc/letsencrypt/live/$serverdn/privkey.pem;" /etc/nginx/sites-available/default
@@ -112,5 +128,6 @@ if [ -d "/etc/letsencrypt/live/$serverdn" ]; then
   fuser -k 80/tcp
   fuser -k 443/tcp
   
+  # Restart nginx service
   service nginx restart
 fi
