@@ -108,8 +108,9 @@ if [ -d "/etc/letsencrypt/live/$serverdn" ]; then
   sed -i "/ssl_certificate / c\        ssl_certificate /etc/letsencrypt/live/$serverdn/fullchain.pem;" /etc/nginx/sites-available/default
   sed -i "/ssl_certificate_key / c\        ssl_certificate_key /etc/letsencrypt/live/$serverdn/privkey.pem;" /etc/nginx/sites-available/default
   
+  # Kill the procresses running on port 80 and 443, so nginx will restart properly
+  fuser -k 80/tcp
+  fuser -k 443/tcp
+  
   service nginx restart
 fi
-
-
-
