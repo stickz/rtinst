@@ -15,7 +15,7 @@ releasename=$(lsb_release -cs)
 
 # Setup rtinst file for logging purposes
 mkdir -p /opt/rtinst
-export logencrypt = "/opt/rtinst/rtletsencrypt"
+export logencrypt="/opt/rtinst/rtletsencrypt"
 rm -f /opt/rtinst/rtletsencrypt
 touch /opt/rtinst/rtletsencrypt
 
