@@ -37,6 +37,7 @@ mkdir -p /opt/rtinst
 export logencrypt="/opt/rtinst/rtletsencrypt"
 rm -f /opt/rtinst/rtletsencrypt
 touch /opt/rtinst/rtletsencrypt
+chmod 777 /opt/rtinst/rtletsencrypt
 
 [ -z $logfile ] && logfile="/dev/null"
 if [ -z $serverip ]; then
