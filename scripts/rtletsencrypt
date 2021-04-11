@@ -8,6 +8,25 @@
 #
 #########################################################################################
 
+RestartNginx()
+{
+  # Kill the procresses running on port 80 and 443, so nginx will restart properly
+  fuser -k 80/tcp
+  fuser -k 443/tcp
+  
+  # Restart nginx service
+  service nginx restart
+}
+
+ResetNginxConf()
+{
+  # Copy the old configuration 
+  cp -f /etc/rtinst/conf/nginxsite /etc/nginx/sites-available/default
+
+  mkdir -p /etc/nginx/conf.d/
+  touch /etc/nginx/conf.d/php
+  touch /etc/nginx/conf.d/cache
+}
 
 headless=0
 osname=$(lsb_release -si)
@@ -86,6 +105,10 @@ if [ $(snap list | grep -c "certbot") = 0 ]; then
   exit 1
 fi
 
+# reset and restart nginx so cerbot can run properly
+ResetNginxConf
+RestartNginx
+
 #Generating Certificates
 certbot -q --nginx --register-unsafely-without-email --agree-tos certonly -d $serverdn >> $logencrypt
 
@@ -120,19 +143,12 @@ if [ -d "/etc/letsencrypt/live/$serverdn" ]; then
   echo "Replacing certificates in nginx"
   
   # reset the configuration file before updating with certificate
-  cp -f /etc/rtinst/conf/nginxsite /etc/nginx/sites-available/default
+  ResetNginxConf
   
   # Update configuration files with certificate
   sed -i "/^\(\s\|#\)*server_name/ c\        server_name $serverdn;" /etc/nginx/sites-available/default
   sed -i "/ssl_certificate / c\        ssl_certificate /etc/letsencrypt/live/$serverdn/fullchain.pem;" /etc/nginx/sites-available/default
   sed -i "/ssl_certificate_key / c\        ssl_certificate_key /etc/letsencrypt/live/$serverdn/privkey.pem;" /etc/nginx/sites-available/default
   
-  # Kill the procresses running on port 80 and 443, so nginx will restart properly
-  fuser -k 80/tcp
-  fuser -k 443/tcp
-  
-  sleep 5
-  
-  # Restart nginx service
-  service nginx restart
+  RestartNginx
 fi
