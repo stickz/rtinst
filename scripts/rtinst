@@ -409,11 +409,6 @@ fi
 ### Prepare Nginx Install ###
 ###############################
 
-# Generate some self signed certificates
-rtsslcert -d
-leflag=1
-echo "Self signed certificats installed"
-
 # Create the necessary files to pass the install procress
 cp -f /etc/rtinst/conf/nginxsite /etc/nginx/sites-available/default
 mkdir -p /etc/nginx/conf.d/
