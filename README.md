@@ -34,8 +34,7 @@ Services that will be installed and configured are
 This fork is designed for a dedicated server and adjusts configuration settings acoordingly. Some important changes include:
 
 	* Multiple bugs have been resolved including issues with geoip, letsencrypt and nginx not working properly.
-	* Note: If you have IPV6 support disabled before running this script. You will have to run rtinst twice.
-
+	
 	* All custom built software is done using GCC's Level 2 Optimizations for a stable performance increase.
 	* The static libaries are no longer built because the operating system prefers to use the dynamic libaries.
 	
