@@ -16,7 +16,7 @@ and then to run the main script, ([check the options you can use](https://github
 
 It takes about 15 minutes to run, depending on your server setup. After you have run the script and everything is working, I suggest a reboot, the script does not automate this reboot, you need to do it manually using the reboot command.
 
-**Note:** If you have IPV6 support disabled before running this script. You will have to run **sudo rtinst** twice. The second time will fix the nginx configuration file, so it installs properly using the packages. This is unavoidable. There is no intention to custom build nginx at this time.
+**Note:** If you have IPV6 support disabled before running this script. You will have to run **sudo rtinst** twice. The second time will fix the nginx configuration file, so it installs properly using the packages. This is unavoidable for the time being. There is no intention to custom build nginx at this time.
 
 [A detailed installation guide](https://github.com/arakasi72/rtinst/wiki/Installing-rtinst)
 
