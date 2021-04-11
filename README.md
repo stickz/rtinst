@@ -14,25 +14,16 @@ and then to run the main script, ([check the options you can use](https://github
 
 	sudo rtinst
 
-It takes about 10 minutes to run, depending on your server setup. After you have run the script and everything is working, I suggest a reboot, the script does not automate this reboot, you need to do it manually using the reboot command.
+It takes about 15 minutes to run, depending on your server setup. After you have run the script and everything is working, I suggest a reboot, the script does not automate this reboot, you need to do it manually using the reboot command.
+
+**Note:** If you have IPV6 support disabled before running this script. You will have to run **sudo rtinst** twice. The second time will fix the nginx configuration file, so it installs properly using the packages. This is unavoidable. There is no intention to custom build nginx at this time.
 
 [A detailed installation guide](https://github.com/arakasi72/rtinst/wiki/Installing-rtinst)
 
 [A detailed user guide](https://github.com/arakasi72/rtinst/wiki/Guide)
 
-**IMPORTANT: NOTE THE NEW SSH PORT AND MAKE SURE YOU CAN SSH INTO YOUR SERVER BEFORE CLOSING THE EXISTING SESSION**
-
-
-Current release has been tested with clean installs of: 
-
-	Ubuntu 16
-	Ubuntu 17
-	Ubuntu 18
-	Ubuntu 19
-	Ubuntu 20
-	Debian 9 "Stretch"
-	Debian 10 "Buster"
-
+It is highly recommended to use **Ubuntu 20.04 LTS** for this fork. However, **Debain 10** will be maintained as well. Older versions of Ubuntu and Debian will receive very limited support. 
+	
 Services that will be installed and configured are
 
 	1. libtorrent/rtorrent
@@ -40,19 +31,46 @@ Services that will be installed and configured are
 	3. Nginx (webserver)
 	4. webmin (optional see section 3.7 in main guide)
 
+This fork is designed for a dedicated server and adjusts configuration settings acoordingly. Some important changes include:
+
+	* Multiple bugs have been resolved including issues with geoip, letsencrypt and nginx not working properly.
+	* Note: If you have IPV6 support disabled before running this script. You will have to run rtinst twice.
+
+	* All custom built software is done using GCC's Level 2 Optimizations for a stable performance increase.
+	* The static libaries are no longer built because the operating system prefers to use the dynamic libaries.
+	
+	* Annoyances with disabling the root login and changing the ssh port will no longer happen. Security enthusiasts can research how to do this.
+	
+	* You can no longer select versions of libtorrent and rtorrent due to superior custom support. (timeout & udns changes)
+	* Simply create an issue report if a new version is released and this fork will be updated. It will always be kept stable on a rolling release.
+	
+	* IPV6 support is disabled for rTorrent and nginx to ensure compability with VPNs.
+	* Support for the following software has been removed from this fork: vsftpd, ffmpeg and autodl-irssi.
+	* Bigger buffer sizes are used in the default rtorrent.rc file to reduce disk seeking. 32GB of ram is highly recommended.
+	* The logging directory for rtorrent is created. All errors which cause the program to crash will be reported.
+	* Preallocation of disk space is enabled by default because fallocate is very fast.
+	* Max open files and sockets have been raised to 10000 for thousands of torrents.
+	* The file limits have been raised to 65535 to allow for thousands of torrents.
+
+	* The curl timeouts have been reduced from 60s to 30s for connections and from 5m to 90s to receive information on http trackers.
+	* The udp tracker requests will no longer retry twice in a short period of time for results because some trackers have rate limits.
+	
+	* The rTorrent build includes the latest verison of curl with c-ares support for asynchronous http tracker requests.
+	* The libtorrent build is a custom version with udns support for asynchronous udp tracker requests.
+	* Asynchronous tracker requests improve performance and prevent rtorrent from stalling with thousands of torrents.
+
+
+Future changes to this fork will improve the performance and throughput. These will include:
+
+	* Installing and configuring dnsmasq as a local dns caching solution for faster tracker updates.
+	* Setting up GCC 10.2 instead of 9.3 on Ubuntu 20.04 LTS for increased performance of software builds.
+	* The sysctl.conf file will be updated will TCP network tweaks to increase throughput. Again 32GB of ram is highly recommended.
+	* The php-fpm configuration will be updated with a bigger memory cache, to reduce the frequency of disk activity.
+	
 
 [rtinst installation guide](https://github.com/arakasi72/rtinst/wiki/Installing-rtinst)
 
 [Additional information on all the features](https://github.com/arakasi72/rtinst/wiki/Guide)
-
-For older unssuported OS [Older OS Installation Guide](https://github.com/arakasi72/rtinst/wiki/Installing-on-Older-OS). These include:
-	
-	Ubuntu 12 (old release)
-	Ubuntu 13 (old release)
-	Ubuntu 14 (old release)
-	Ubuntu 15 (old release)
-	Debian 7 "Wheezy" (old release)
-	Debian 8 "Jessie" (old release)
 
 To see latest updates to the script go to [Change Log](https://github.com/arakasi72/rtinst/wiki/Change-Log)
 
