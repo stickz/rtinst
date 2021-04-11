@@ -8,11 +8,25 @@
 #
 #########################################################################################
 
+headless=0
+osname=$(lsb_release -si)
+releasename=$(lsb_release -cs)
+
+[ -z $logfile ] && logfile="/dev/null"
+if [ -z $serverip ]; then
+  headless=1
+fi
+
+#check it is being run as root
+if [ "$(id -u)" != "0" ]; then
+  echo "Must be run from root or using sudo" && exit 1
+fi
+
 RestartNginx()
 {
   # Kill the procresses running on port 80 and 443, so nginx will restart properly
-  fuser -k 80/tcp
-  fuser -k 443/tcp
+  fuser -k 80/tcp >> $logfile 2>&1
+  fuser -k 443/tcp >> $logfile 2>&1
   
   # Restart nginx service
   service nginx restart
@@ -27,20 +41,6 @@ ResetNginxConf()
   touch /etc/nginx/conf.d/php
   touch /etc/nginx/conf.d/cache
 }
-
-headless=0
-osname=$(lsb_release -si)
-releasename=$(lsb_release -cs)
-
-[ -z $logfile ] && logfile="/dev/null"
-if [ -z $serverip ]; then
-  headless=1
-fi
-
-#check it is being run as root
-if [ "$(id -u)" != "0" ]; then
-  echo "Must be run from root or using sudo" && exit 1
-fi
 
 if [ $headless = 1 ]; then
   serveripa=$(ip route get 8.8.8.8 | awk 'NR==1 {print $7}')
