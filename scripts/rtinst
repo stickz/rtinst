@@ -416,8 +416,8 @@ touch /etc/nginx/conf.d/php
 touch /etc/nginx/conf.d/cache
 
 # Kill the procresses running on port 80 and 443 to pass the install procress
-fuser -k 80/tcp
-fuser -k 443/tcp
+fuser -k 80/tcp >> $logfile 2>&1
+fuser -k 443/tcp >> $logfile 2>&1
 
 ###############################
 ### PREPARE SYSTEM ###
@@ -968,7 +968,7 @@ echo | tee -a $home/rtinst.info
 echo "IMPORTANT: SSH Port set to $sshport" | tee -a $home/rtinst.info
 echo "IMPORTANT: SSH Port set to $sshport"
 echo "IMPORTANT: SSH Port set to $sshport"
-echo "Please ensure you can login BEFORE closing this session"
+echo "Please ensure you can login BEuser FORE closing this session"
 echo
 echo "The above information is stored in rtinst.info in your home directory."
 echo "To see contents enter: cat $home/rtinst.info"
