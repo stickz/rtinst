@@ -131,6 +131,8 @@ if [ -d "/etc/letsencrypt/live/$serverdn" ]; then
   fuser -k 80/tcp
   fuser -k 443/tcp
   
+  sleep 5
+  
   # Restart nginx service
   service nginx restart
 fi
