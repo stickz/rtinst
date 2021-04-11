@@ -64,7 +64,7 @@ Future changes to this fork will improve the performance and throughput. These w
 
 	* Installing and configuring dnsmasq as a local dns caching solution for faster tracker updates.
 	* Setting up GCC 10.2 instead of 9.3 on Ubuntu 20.04 LTS for increased performance of software builds.
-	* The sysctl.conf file will be updated will TCP network tweaks to increase throughput. Again 32GB of ram is highly recommended.
+	* The sysctl.conf file will be updated with TCP network tweaks to increase throughput. Again 32GB of ram is highly recommended.
 	* The php-fpm configuration will be updated with a bigger memory cache, to reduce the frequency of disk activity.
 	
 
