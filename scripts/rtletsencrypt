@@ -22,14 +22,14 @@ if [ "$(id -u)" != "0" ]; then
   echo "Must be run from root or using sudo" && exit 1
 fi
 
-RestartNginx()
+StopNginx()
 {
-  # Kill the procresses running on port 80 and 443, so nginx will restart properly
+  # Tell the nginx service to stop running
+  service nginx stop
+  
+  # If it doesn't stop running, kill it
   fuser -k 80/tcp >> $logfile 2>&1
   fuser -k 443/tcp >> $logfile 2>&1
-  
-  # Restart nginx service
-  service nginx restart
 }
 
 ResetNginxConf()
@@ -37,6 +37,7 @@ ResetNginxConf()
   # Copy the old configuration 
   cp -f /etc/rtinst/conf/nginxsite /etc/nginx/sites-available/default
 
+  # Create the nginx configuration files
   mkdir -p /etc/nginx/conf.d/
   touch /etc/nginx/conf.d/php
   touch /etc/nginx/conf.d/cache
@@ -99,12 +100,8 @@ if [ $(snap list | grep -c "certbot") = 0 ]; then
   exit 1
 fi
 
-# reset and restart nginx so cerbot can run properly
-ResetNginxConf
-RestartNginx
-
 #Generating Certificates
-certbot -q --nginx --register-unsafely-without-email --agree-tos certonly -d $serverdn >> $logfile 2>&1
+certbot -q --register-unsafely-without-email --agree-tos certonly -d $serverdn >> $logfile 2>&1
 
 if [ $? = 1 ]; then
   echo "unable to generate certificates"
@@ -120,7 +117,10 @@ fi
 if [ -d "/etc/letsencrypt/live/$serverdn" ]; then
   echo "Replacing certificates in nginx"
   
-  # reset the configuration file before updating with certificate
+  # Try to stop nginx gracefully. If that doesn't work, kill the procress
+  StopNginx
+  
+  # Reset the configuration file before updating the certificate
   ResetNginxConf
   
   # Update configuration files with certificate
@@ -128,5 +128,6 @@ if [ -d "/etc/letsencrypt/live/$serverdn" ]; then
   sed -i "/ssl_certificate / c\        ssl_certificate /etc/letsencrypt/live/$serverdn/fullchain.pem;" /etc/nginx/sites-available/default
   sed -i "/ssl_certificate_key / c\        ssl_certificate_key /etc/letsencrypt/live/$serverdn/privkey.pem;" /etc/nginx/sites-available/default
   
-  RestartNginx
+  # Start the nginx service back up
+  service nginx start
 fi
