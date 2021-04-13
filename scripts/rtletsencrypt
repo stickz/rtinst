@@ -101,7 +101,7 @@ if [ $(snap list | grep -c "certbot") = 0 ]; then
 fi
 
 #Generating Certificates
-certbot -q --register-unsafely-without-email --agree-tos certonly -d $serverdn >> $logfile 2>&1
+certbot -q --nginx --register-unsafely-without-email --agree-tos certonly -d $serverdn >> $logfile 2>&1
 
 if [ $? = 1 ]; then
   echo "unable to generate certificates"
