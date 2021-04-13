@@ -703,6 +703,8 @@ echo "SSH port set to $sshport"
     leflag=0
     echo "Lets Encrypt Certificates installed"
   else
+    # Reinstall the self-signed cerificates, as the nginx package will override this
+    cp -f /etc/rtinst/conf/nginxsite /etc/nginx/sites-available/default    
     leflag=1
     echo "Self signed certificats installed"
   fi
