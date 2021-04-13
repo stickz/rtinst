@@ -410,10 +410,13 @@ fi
 ###############################
 
 # Create the necessary files to pass the install procress
-cp -f /etc/rtinst/conf/nginxbasic /etc/nginx/sites-available/default
+cp -f /etc/rtinst/conf/nginxsite /etc/nginx/sites-available/default
 mkdir -p /etc/nginx/conf.d/
 touch /etc/nginx/conf.d/php
 touch /etc/nginx/conf.d/cache
+
+# Generate some self-signed cerficiates to pass the install procress
+rtsslcert -d
 
 # Kill the procresses running on port 80 and 443 to pass the install procress
 fuser -k 80/tcp >> $logfile 2>&1
@@ -700,7 +703,6 @@ echo "SSH port set to $sshport"
     leflag=0
     echo "Lets Encrypt Certificates installed"
   else
-    rtsslcert -d
     leflag=1
     echo "Self signed certificats installed"
   fi
@@ -772,9 +774,6 @@ echo "}" >> /etc/nginx/conf.d/cache
 # Update the nginx site file if we're using a self-signed cerificate
 # The letsencrypt cerificate will already do this for us
 if [ $leflag = 1 ]; then
-  mv -n /etc/nginx/sites-available/default /etc/nginx/sites-available/default.original
-  cp -f /etc/rtinst/conf/nginxsite /etc/nginx/sites-available/default
-  
   # We only need to update the server name here. The certificate and key is added by the configuration file.
   sed -i "/^\(\s\|#\)*server_name/ c\        server_name $serverip;" /etc/nginx/sites-available/default
 fi
