@@ -410,7 +410,7 @@ fi
 ###############################
 
 # Create the necessary files to pass the install procress
-cp -f /etc/rtinst/conf/nginxsite /etc/nginx/sites-available/default
+cp -f /etc/rtinst/conf/nginxbasic /etc/nginx/sites-available/default
 mkdir -p /etc/nginx/conf.d/
 touch /etc/nginx/conf.d/php
 touch /etc/nginx/conf.d/cache
