@@ -108,8 +108,6 @@ if [ $? = 1 ]; then
   exit 1
 fi
 
-echo "Certificates Generated"
-
 if [ $headless = 0 ]; then
   exit 0
 fi
@@ -130,4 +128,8 @@ if [ -d "/etc/letsencrypt/live/$serverdn" ]; then
   
   # Start the nginx service back up
   service nginx start
+  
+else
+  echo "unable to install certificates"
+  exit 1
 fi
