@@ -749,9 +749,6 @@ elif [ -d "/usr/share/nginx/html" ]; then
   cp /usr/share/nginx/html/* /var/www
 fi
 
-mv -n /etc/nginx/sites-available/default /etc/nginx/sites-available/default.original
-
-cp -f /etc/rtinst/conf/nginxsite /etc/nginx/sites-available/default
 cp -f /etc/rtinst/conf/nginxsitedl /etc/nginx/sites-available/dload-loc
 
 echo "location ~ \.php$ {" > /etc/nginx/conf.d/php
@@ -772,11 +769,13 @@ echo "location ~* \.(jpg|jpeg|gif|css|png|js|woff|ttf|svg|eot)$ {" > /etc/nginx/
 echo "        expires 30d;" >> /etc/nginx/conf.d/cache
 echo "}" >> /etc/nginx/conf.d/cache
 
-if [ $leflag = 0 ]; then
-  sed -i "/^\(\s\|#\)*server_name/ c\        server_name $serverdn;" /etc/nginx/sites-available/default
-  sed -i "/ssl_certificate / c\        ssl_certificate /etc/letsencrypt/live/$serverdn/fullchain.pem;" /etc/nginx/sites-available/default
-  sed -i "/ssl_certificate_key / c\        ssl_certificate_key /etc/letsencrypt/live/$serverdn/privkey.pem;" /etc/nginx/sites-available/default
-else
+# Update the nginx site file if we're using a self-signed cerificate
+# The letsencrypt cerificate will already do this for us
+if [ $leflag = 1 ]; then
+  mv -n /etc/nginx/sites-available/default /etc/nginx/sites-available/default.original
+  cp -f /etc/rtinst/conf/nginxsite /etc/nginx/sites-available/default
+  
+  # We only need to update the server name here. The certificate and key is added by the configuration file.
   sed -i "/^\(\s\|#\)*server_name/ c\        server_name $serverip;" /etc/nginx/sites-available/default
 fi
 
