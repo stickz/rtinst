@@ -730,29 +730,6 @@ sshport=$(grep 'Port ' /etc/ssh/sshd_config | sed 's/[^0-9]*//g')
 echo "SSH port set to $sshport"
 
 ###############################
-### SSL CERTIFICATES (Post Nginx) ###
-###############################
-  # Try to stop nginx gracefully. If that doesn't work, kill the procress
-  StopNginx
-  
-  # Prepare nginx to pass the rtletsencrypt procress
-  # Nginx must have a working https configuration to pass
-  PrepNginxInstall
-
-  # Start the nginx service so it's ready to pass the rtletsencrypt procress
-  service nginx start >> $logfile 2>&1
-  
-  # calls the script rtsslcert to generate the ssl certificated for nginx
-  if rtletsencrypt ; then
-    leflag=0
-    echo "Lets Encrypt Certificates installed"
-  else
-    # Reinstall the self-signed cerificates, as the nginx package will override this
-    leflag=1
-    echo "Self signed certificats installed"
-  fi
-
-###############################
 ### INSTALL NGINX ###
 ###############################
 
@@ -764,7 +741,7 @@ if [ -f "/etc/apache2/ports.conf" ]; then
   service apache2 stop >> $logfile 2>&1
 fi
 
-echo "Installing nginx" | tee -a $logfile
+echo "Configuring nginx" | tee -a $logfile
 
 if [ $passflag != 2 ]; then
   if [ -f $passfile ]; then
@@ -816,18 +793,27 @@ echo "location ~* \.(jpg|jpeg|gif|css|png|js|woff|ttf|svg|eot)$ {" > /etc/nginx/
 echo "        expires 30d;" >> /etc/nginx/conf.d/cache
 echo "}" >> /etc/nginx/conf.d/cache
 
-# Update the nginx site file if we're using a self-signed cerificate
-# The letsencrypt cerificate will already do this for us
-if [ $leflag = 1 ]; then
-  # We only need to update the server name here. The certificate and key is added by the configuration file.
-  sed -i "/^\(\s\|#\)*server_name/ c\        server_name $serverip;" /etc/nginx/sites-available/default
-fi
+# We only need to update the server name here. The certificate and key is added by the configuration file.
+sed -i "/^\(\s\|#\)*server_name/ c\        server_name $serverip;" /etc/nginx/sites-available/default
 
 service nginx restart && service $phpver-fpm restart
 
 if [ $dlflag = 0 ]; then
   rtdload enable
 fi
+
+###############################
+### SSL CERTIFICATES (Post Nginx) ###
+###############################
+ 
+  # calls the script rtsslcert to generate the ssl certificated for nginx
+  if rtletsencrypt ; then
+    leflag=0
+    echo "Lets Encrypt Certificates installed"
+  else
+    leflag=1
+    echo "Self signed certificats installed"
+  fi
 
 ###############################
 ### INSTALL RTORRENT ###
