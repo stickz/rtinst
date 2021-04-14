@@ -428,8 +428,6 @@ fi
 ### Prepare Nginx Install ###
 ###############################
 
-mkdir -p /etc/nginx/sites-available
-
 # Try to stop nginx gracefully. If that doesn't work, kill the procress
 StopNginx
 
