@@ -803,19 +803,6 @@ if [ $dlflag = 0 ]; then
 fi
 
 ###############################
-### SSL CERTIFICATES (Post Nginx) ###
-###############################
- 
-  # calls the script rtsslcert to generate the ssl certificated for nginx
-  if rtletsencrypt ; then
-    leflag=0
-    echo "Lets Encrypt Certificates installed"
-  else
-    leflag=1
-    echo "Self signed certificats installed"
-  fi
-
-###############################
 ### INSTALL RTORRENT ###
 ###############################
 
@@ -892,6 +879,19 @@ fi
 
 # Copy GeoIP database for ruTorrent geoip plugin
 cp -r /etc/rtinst/GeoIP /usr/share
+
+###############################
+### SSL CERTIFICATES ###
+###############################
+ 
+  # calls the script rtsslcert to generate the ssl certificated for nginx
+  if rtletsencrypt ; then
+    leflag=0
+    echo "Lets Encrypt Certificates installed"
+  else
+    leflag=1
+    echo "Self signed certificats installed"
+  fi
 
 ###############################
 ### FINAL TASKS ###
