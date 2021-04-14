@@ -171,10 +171,10 @@ echo $ip_address
 PrepNginxInstall()
 {
   # Create the necessary files to pass the install procress
-  cp -f /etc/rtinst/conf/nginxsite /etc/nginx/sites-available/default
-  mkdir -p /etc/nginx/conf.d/
-  touch /etc/nginx/conf.d/php
-  touch /etc/nginx/conf.d/cache
+  cp -f /etc/rtinst/conf/nginxsite /etc/nginx/sites-available/default >> $logfile 2>&1
+  mkdir -p /etc/nginx/conf.d/ >> $logfile 2>&1
+  touch /etc/nginx/conf.d/php >> $logfile 2>&1
+  touch /etc/nginx/conf.d/cache >> $logfile 2>&1
 }
 
 StopNginx()
@@ -427,6 +427,8 @@ fi
 ###############################
 ### Prepare Nginx Install ###
 ###############################
+
+mkdir -p /etc/nginx/sites-available
 
 # Try to stop nginx gracefully. If that doesn't work, kill the procress
 StopNginx
