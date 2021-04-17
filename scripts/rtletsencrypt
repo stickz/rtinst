@@ -91,6 +91,7 @@ if [ $osname = "Debian" ]; then snap install core >> $logfile 2>&1; snap refresh
 if [ $(snap list | grep -c "certbot") = 0 ]; then
   echo "Installing certbot"
   snap install --classic certbot >> $logfile 2>&1
+  ln -s /snap/bin/certbot /usr/bin/certbot
 else
   echo "certbot already installed"
 fi
