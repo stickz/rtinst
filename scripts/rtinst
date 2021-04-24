@@ -634,6 +634,18 @@ if [[ $phpver =~ php7.[0-9] ]]; then
   aptitude -q=5 -y install $phpver-mbstring >> $logfile 2>&1
 fi
 
+if [ "$(lsb_release -sr)" = "20.04" ]; then
+  echo "Detected Ubuntu 20.04. Upgrading to GCC 10."
+  aptitude -q=5 -y install gcc-10 g++-10
+  
+  # Configure update alternatives to use GCC 10
+  # Do gcc 10 & g++ 10 first so it receives the highest priority
+  update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 10
+  update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 10
+  update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9
+  update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 9
+fi
+
 #install unrar package
 if [ $osname = "Debian" ] && ! installed unrar; then
   echo "Installing rar/unrar"
