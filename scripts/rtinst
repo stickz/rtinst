@@ -560,7 +560,7 @@ fi
 #Interaction ended message
 echo
 echo "No more user input required, you can complete unattended"
-echo "It will take approx 10 minutes for the script to complete"
+echo "It will take approx 15 minutes for the script to complete"
 echo
 
 # kill apt-daily.service if running 
