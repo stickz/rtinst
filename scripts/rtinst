@@ -636,7 +636,7 @@ fi
 
 if [ "$(lsb_release -sr)" = "20.04" ]; then
   echo "Detected Ubuntu 20.04. Upgrading to GCC 10."
-  aptitude -q=5 -y install gcc-10 g++-10
+  aptitude -q=5 -y install gcc-10 g++-10 >> $logfile 2>&1
   
   # Configure update alternatives to use GCC 10
   # Do gcc 10 & g++ 10 first so it receives the highest priority
