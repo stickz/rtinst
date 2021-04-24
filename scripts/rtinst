@@ -686,7 +686,12 @@ echo "Installing Dnsmasq"
 systemctl disable systemd-resolved >> $logfile 2>&1
 systemctl stop systemd-resolved >> $logfile 2>&1
 
-sleep 3 # sleep for 3 seconds to give systemd-resolved time to stop
+# Remove the symlinked resolv.conf file
+rm /etc/resolv.conf >> $logfile 2>&1
+
+# Create new resolv.conf file. Add dnsmasq and cloudflare dns server
+bash -c 'echo nameserver 127.0.0.1 >> /etc/resolv.conf'
+bash -c 'echo nameserver 1.1.1.1 >> /etc/resolv.conf'
 
 # Install dnsmasq from repository
 aptitude -q=5 -y install dnsmasq >> $logfile 2>&1
@@ -756,13 +761,6 @@ echo "SSH port set to $sshport"
 ###############################
 ### CONFIGURE DNSMASQ ###
 ###############################
-
-# Remove the symlinked resolv.conf file
-rm /etc/resolv.conf >> $logfile 2>&1
-
-# Create new resolv.conf file. Add dnsmasq and cloudflare dns server
-bash -c 'echo nameserver 127.0.0.1 >> /etc/resolv.conf'
-bash -c 'echo nameserver 1.1.1.1 >> /etc/resolv.conf'
 
 # Update configuration varriables in /etc/dnsmasq.conf
 sed -i "s/#port=5353/port=53/g" /etc/dnsmasq.conf
