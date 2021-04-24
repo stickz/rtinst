@@ -14,7 +14,7 @@ and then to run the main script, ([check the options you can use](https://github
 
 	sudo rtinst
 
-It takes about 15 minutes to run, depending on your server setup. After you have run the script and everything is working, I suggest a reboot, the script does not automate this reboot, you need to do it manually using the reboot command.
+The script takes about 15 minutes to run (depending on your server setup). After the script succesfully completes, I suggest a reboot. The script does not automatically reboot. You can optionally run `sudo reboot` to manually reboot.
 
 [A detailed installation guide](https://github.com/arakasi72/rtinst/wiki/Installing-rtinst)
 
