@@ -686,6 +686,8 @@ echo "Installing Dnsmasq"
 systemctl disable systemd-resolved >> $logfile 2>&1
 systemctl stop systemd-resolved >> $logfile 2>&1
 
+sleep 3 # sleep for 3 seconds to give systemd-resolved time to stop
+
 # Install dnsmasq from repository
 aptitude -q=5 -y install dnsmasq >> $logfile 2>&1
 
