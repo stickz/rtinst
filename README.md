@@ -37,6 +37,7 @@ This fork is designed for a dedicated server and adjusts configuration settings 
 	
 	* All custom built software is done using GCC's Level 2 Optimizations for a stable performance increase.
 	* The static libaries are no longer built because the operating system prefers to use the dynamic libaries.
+	* Ubuntu 20.04 LTS now uses GCC 10.2 instead of 9.3 for increased performance of software builds.
 	
 	* Annoyances with disabling the root login and changing the ssh port will no longer happen. Security enthusiasts can research how to do this.
 	
@@ -62,7 +63,6 @@ This fork is designed for a dedicated server and adjusts configuration settings 
 Future changes to this fork will improve the performance and throughput. These will include:
 
 	* Installing and configuring dnsmasq as a local dns caching solution for faster tracker updates.
-	* Setting up GCC 10.2 instead of 9.3 on Ubuntu 20.04 LTS for increased performance of software builds.
 	* The sysctl.conf file will be updated with TCP network tweaks to increase throughput. Again 32GB of ram is highly recommended.
 	* The php-fpm configuration will be updated with a bigger memory cache, to reduce the frequency of disk activity.
 	
