@@ -29,7 +29,8 @@ Services that will be installed and configured are
 	1. libtorrent/rtorrent
 	2. rutorrent
 	3. Nginx (webserver)
-	4. webmin (optional see section 3.7 in main guide)
+	4. Dnsmasq (dns server)
+	5. webmin (optional see section 3.7 in main guide)
 
 This fork is designed for a dedicated server and adjusts configuration settings acoordingly. Some important changes include:
 
@@ -55,6 +56,7 @@ This fork is designed for a dedicated server and adjusts configuration settings 
 	* The curl timeouts have been reduced from 60s to 30s for connections and from 5m to 90s to receive information on http trackers.
 	* The udp tracker requests will no longer retry twice in a short period of time for results because some trackers have rate limits.
 	
+	* The dnsmasq dns server is installed and configured, as a local dns caching solution for faster tracker updates.
 	* The rTorrent build includes the latest verison of curl with c-ares support for asynchronous http tracker requests.
 	* The libtorrent build is a custom version with udns support for asynchronous udp tracker requests.
 	* Asynchronous tracker requests improve performance and prevent rtorrent from stalling with thousands of torrents.
@@ -62,7 +64,6 @@ This fork is designed for a dedicated server and adjusts configuration settings 
 
 Future changes to this fork will improve the performance and throughput. These will include:
 
-	* Installing and configuring dnsmasq as a local dns caching solution for faster tracker updates.
 	* The sysctl.conf file will be updated with TCP network tweaks to increase throughput. Again 32GB of ram is highly recommended.
 	* The php-fpm configuration will be updated with a bigger memory cache, to reduce the frequency of disk activity.
 	
