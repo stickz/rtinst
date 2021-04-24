@@ -680,6 +680,7 @@ else
 fi
 
 ### INSTALL DNSMASQ ###
+echo "Installing Dnsmasq"
 
 # Disable the resolved service
 systemctl disable systemd-resolved >> $logfile 2>&1
