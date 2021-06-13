@@ -58,6 +58,8 @@ This fork is designed for a dedicated server and adjusts configuration settings 
 	* The rTorrent build includes the latest verison of curl with c-ares support for asynchronous http tracker requests.
 	* The libtorrent build is a custom version with udns support for asynchronous udp tracker requests.
 	* Asynchronous tracker requests improve performance and prevent rtorrent from stalling with thousands of torrents.
+	
+	* Backported a few fixes from jesec/libtorrent for memory leaks in the libtorrent binary.
 
 
 Future changes to this fork will improve the performance and throughput. These will include:
