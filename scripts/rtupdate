@@ -98,7 +98,7 @@ rm curl-7.77.0.tar.gz
 # Install curl before we procede, so rtorrent -n can be run
 cd curl*
 echo "Installing curl" | tee -a $logfile
-./configure --prefix=/usr --enable-ares -disable-static CFLAGS=-O2 >> $logfile 2>&1
+./configure --prefix=/usr --with-openssl --enable-ares -disable-static CFLAGS=-O2 >> $logfile 2>&1
 make -j$(nproc) >> $logfile 2>&1
 make -s install >> $logfile 2>&1
 
