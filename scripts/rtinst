@@ -197,8 +197,6 @@ PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/bin:/sbin
 rtorrentrel='0.9.6'
 
 #url's of the major components
-rt_url="http://rtorrent.net/downloads/"
-
 xmlrpc_url="https://svn.code.sf.net/p/xmlrpc-c/code/advanced/"
 xmlrpc_url_alt="https://github.com/mirror/xmlrpc-c"
 
@@ -367,8 +365,6 @@ done
 
 echo
 echo "Checking major 3rd party components"
-echo -n "Rtorrent: "; check_url $rt_url && echo "OK" || { echo "FAIL"; major_repo=1; }
-
 echo -n "xmlrpc-c: "; check_url $xmlrpc_url && echo "OK" ||  xmlrpc_repo=1
 
 if [[ $xmlrpc_repo = 1 ]]; then
