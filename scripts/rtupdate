@@ -29,9 +29,6 @@ if [ "$fullrelno" = "" ]; then
   fullrelno=$(grep -oP '(?<=^VERSION_ID=).+' /etc/os-release | tr -d '"')
 fi
 
-
-sourcedir='http://rtorrent.net/downloads/'
-
 xmlrpc_url='https://svn.code.sf.net/p/xmlrpc-c/code/stable/'
 xmlrpcloc='svn://svn.code.sf.net/p/xmlrpc-c/code/stable/'
 
@@ -49,24 +46,8 @@ if ([ "$osname" = "Debian" ] || [ "$osname" = "Raspbian" ] && [ $relno -ge 9 ]) 
 fi
 
 listsize=6
-duoversion=''
 passed_rtvers=$1
 [ -z $logfile ] && logfile="/dev/null"
-
-# get a list of the most recent releases
-rt_releases=$(wget -q -O - $sourcedir | grep -o "rtorrent-[0-9]\{1,2\}\.[0-9]\{1,2\}\.[0-9]\{1,2\}\.tar.gz" | sort -uV | tail -$listsize | grep -o "[0-9]\{1,2\}\.[0-9]\{1,2\}\.[0-9]\{1,2\}")
-
-# extract the release numbers from the list of most recent releases
-for rtversion in $rt_releases
-  do
-    libversion=$(echo $rtversion | awk -F. -v OFS=. '{$2='$(( $(echo $rtversion | cut -d. -f2) + 4 ))'; print }')
-    duoversion="$duoversion $libversion/$rtversion"
-  done
-
-# get the most recent release version number
-latest_duo=$(echo $duoversion | rev | cut -d' ' -f1 | rev)
-latest_libvers=$(echo $latest_duo | cut -d/ -f1)
-latest_rtvers=$(echo $latest_duo | cut -d/ -f2)
 
 # checks if an application is installed
 installed() {
