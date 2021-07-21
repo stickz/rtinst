@@ -92,8 +92,8 @@ cd ~/source
 # Get libcurl version 7.77.0 from the curl website, extract it and remove archive
 echo "Downloading curl" | tee -a $logfile
 wget -q https://github.com/curl/curl/releases/download/curl-7_77_0/curl-7.77.0.tar.gz
-tar -xzf curl-7.76.0.tar.gz
-rm curl-7.76.0.tar.gz
+tar -xzf curl-7.77.0.tar.gz
+rm curl-7.77.0.tar.gz
 
 # Install curl before we procede, so rtorrent -n can be run
 cd curl*
