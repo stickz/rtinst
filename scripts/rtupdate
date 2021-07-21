@@ -114,15 +114,6 @@ if [[ $xmlrpc_repo = 1 ]]; then
   check_url $xmlrpc_url && { echo "OK";  xmlrpc_repo=0; } || { echo "FAIL"; xmlrpc_repo=1; }
 fi
 
-echo -n "rtorrent: "; check_url $sourcedir && echo "OK" || { echo "FAIL"; rt_repo=1; }
-
-if [ $rt_repo = 1 ]; then
-  echo "The libtorrent/rtorrent file repositoy is offline"
-  echo "Try again later, you can check if the following address is online in your browser:"
-  echo $sourcedir
-  exit 1
-fi
-
 if [ $xmlrpc_repo = 1 ]; then
   if [ -d /usr/include/xmlrpc-c ]; then
     echo "xmlrpc repository is off line, but looks like it has already beed installed."
