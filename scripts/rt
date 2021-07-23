@@ -99,7 +99,7 @@ while ( service_running )
      seconds=$(( $seconds + 1 ))
      echo -n " ."
      sleep 1
-     if [ $seconds = 20 ]; then
+     if [ $seconds = 30 ]; then
        echo
        return 1
      fi
