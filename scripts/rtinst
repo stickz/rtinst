@@ -689,6 +689,9 @@ rm /etc/resolv.conf >> $logfile 2>&1
 bash -c 'echo nameserver 127.0.0.1 >> /etc/resolv.conf'
 bash -c 'echo nameserver 1.1.1.1 >> /etc/resolv.conf'
 
+# Make resolv.conf file immutable to prevent DNS issues
+chattr +i /etc/resolv.conf >> $logfile 2>&1
+
 # Install dnsmasq from repository
 aptitude -q=5 -y install dnsmasq >> $logfile 2>&1
 
